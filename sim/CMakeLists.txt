@@ -46,7 +46,7 @@ foreach (GZ_INCLUDE ${GAZEBO_INCLUDE_DIRS})
     list(APPEND GZ_INCLUDE_FLAGS "-I${GZ_INCLUDE}")
 endforeach ()
 
-list(APPEND GZ_INCLUDE_FLAGS "-I/usr/include/x86_64-linux-gnu/qt5/")
+list(APPEND GZ_INCLUDE_FLAGS "-I/usr/include/qt5/")
 add_custom_command(OUTPUT ${pch_out}
         COMMAND ${CMAKE_CXX_COMPILER} ${GZ_INCLUDE_FLAGS} ${FLAGS} ${pch_in} -o ${pch_out}
         DEPENDS ${pch_in}
@@ -119,7 +119,7 @@ set(SIMS SimSolve SimNavTest)
 foreach (MAIN ${SIMS})
     add_executable(${MAIN} "main/${MAIN}.cpp")
     set_target_properties(${MAIN} PROPERTIES COMPILE_FLAGS "-include gazebo_pch.hh")
-    target_link_libraries(${MAIN} sim ${GAZEBO_LIBRARIES})
+    target_link_libraries(${MAIN} sim ${GAZEBO_LIBRARIES} Qt5Core)
     target_include_directories(${MAIN} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} commands)
     add_dependencies(${MAIN} gazebo_pch)
 endforeach ()
@@ -129,12 +129,12 @@ endforeach ()
 #################################
 add_executable(keyboard_teleop ./tools/keyboard_teleop.cpp)
 set_target_properties(keyboard_teleop PROPERTIES COMPILE_FLAGS "-include gazebo_pch.hh")
-target_link_libraries(keyboard_teleop sim ${GAZEBO_LIBRARIES} ncurses)
+target_link_libraries(keyboard_teleop sim ${GAZEBO_LIBRARIES} ncurses Qt5Core)
 target_include_directories(keyboard_teleop PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${PROTOBUF_INCLUDE_DIRS} commands)
 add_dependencies(keyboard_teleop gazebo_pch)
 
 add_executable(joy_teleop ./tools/joystick_teleop.cpp joystick/joystick.cc)
 set_target_properties(joy_teleop PROPERTIES COMPILE_FLAGS "-include gazebo_pch.hh")
-target_link_libraries(joy_teleop sim ${GAZEBO_LIBRARIES} ncurses)
+target_link_libraries(joy_teleop sim ${GAZEBO_LIBRARIES} ncurses Qt5Core)
 target_include_directories(joy_teleop PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${PROTOBUF_INCLUDE_DIRS} commands)
 add_dependencies(joy_teleop gazebo_pch)
